@@ -348,6 +348,7 @@ impl fmt::Display for EventType {
 #[derive(
     Deserialize, From, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
 )]
+#[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
 pub enum Event {
     Ping(PingEvent),
@@ -364,10 +365,10 @@ pub enum Event {
     Gollum(GollumEvent),
     Installation(InstallationEvent),
     InstallationRepositories(InstallationRepositoriesEvent),
-    IntegrationInstallation(IntegrationInstallationEvent),
-    IntegrationInstallationRepositories(
-        IntegrationInstallationRepositoriesEvent,
-    ),
+    // IntegrationInstallation(IntegrationInstallationEvent),
+    // IntegrationInstallationRepositories(
+    //     IntegrationInstallationRepositoriesEvent,
+    // ),
     IssueComment(IssueCommentEvent),
     Issues(IssuesEvent),
     Label(LabelEvent),
@@ -397,6 +398,34 @@ pub enum Event {
     Watch(WatchEvent),
 }
 
+impl Event{
+    pub fn event_type(&self) -> EventType{
+        match self{
+            Event::Ping(_) => EventType::Ping,
+            Event::CheckRun(_) => EventType::CheckRun,
+            Event::CheckSuite(_) => EventType::CheckSuite,
+            Event::CommitComment(_) => EventType::CommitComment,
+            Event::Create(_) => EventType::Create,
+            Event::Delete(_) => EventType::Delete,
+            Event::GitHubAppAuthorization(_) => EventType::GitHubAppAuthorization,
+            Event::Gollum(_) => EventType::Gollum,
+            Event::Installation(_) => EventType::Installation,
+            Event::InstallationRepositories(_) => EventType::InstallationRepositories,
+            // Event::IntegrationInstallation(_) => EventType::IntegrationInstallation,
+            // Event::IntegrationInstallationRepositories(_) => EventType::IntegrationInstallationRepositories,
+            Event::IssueComment(_) => EventType::IssueComment,
+            Event::Issues(_) => EventType::Issues,
+            Event::Label(_) => EventType::Label,
+            Event::PullRequest(_) => EventType::PullRequest,
+            Event::PullRequestReview(_) => EventType::PullRequestReview,
+            Event::PullRequestReviewComment(_) => EventType::PullRequestReviewComment,
+            Event::Push(_) => EventType::Push,
+            Event::Repository(_) => EventType::Repository,
+            Event::Watch(_) => EventType::Watch,
+        }
+    }
+}
+
 impl AppEvent for Event {
     fn installation(&self) -> Option<u64> {
         match self {
@@ -410,8 +439,8 @@ impl AppEvent for Event {
             Event::Gollum(e) => e.installation(),
             Event::Installation(e) => e.installation(),
             Event::InstallationRepositories(e) => e.installation(),
-            Event::IntegrationInstallation(e) => e.installation(),
-            Event::IntegrationInstallationRepositories(e) => e.installation(),
+            // Event::IntegrationInstallation(e) => e.installation(),
+            // Event::IntegrationInstallationRepositories(e) => e.installation(),
             Event::IssueComment(e) => e.installation(),
             Event::Issues(e) => e.installation(),
             Event::Label(e) => e.installation(),
@@ -815,25 +844,6 @@ impl AppEvent for InstallationRepositoriesEvent {
     }
 }
 
-/// Event deprecated by GitHub. Use `InstallationEvent` instead.
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
-pub struct IntegrationInstallationEvent {}
-
-impl AppEvent for IntegrationInstallationEvent {
-    fn installation(&self) -> Option<u64> {
-        None
-    }
-}
-
-/// Event deprecated by GitHub. Use `InstallationRepositoriesEvent` instead.
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
-pub struct IntegrationInstallationRepositoriesEvent {}
-
-impl AppEvent for IntegrationInstallationRepositoriesEvent {
-    fn installation(&self) -> Option<u64> {
-        None
-    }
-}
 
 #[derive(
     Deserialize, Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
