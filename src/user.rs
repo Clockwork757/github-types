@@ -18,10 +18,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 /// Information about a user.
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct User {
     pub login: String,
     pub id: u64,
@@ -42,7 +42,7 @@ pub struct User {
 }
 
 /// Information about the current authenticated user.
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct AuthenticatedUser {
     pub login: String,
     pub id: u64,

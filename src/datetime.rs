@@ -22,6 +22,7 @@ use std::ops::Deref;
 
 use chrono;
 use serde::de::{self, Deserialize, Deserializer, Visitor};
+use serde::Serialize;
 
 /// A UTC datetime that can be deserialized as either a string or unix
 /// timestamp.
@@ -118,5 +119,30 @@ impl<'de> Deserialize<'de> for DateTime {
         } else {
             deserializer.deserialize_i64(DateTimeVisitor)
         }
+    }
+}
+
+impl Serialize for DateTime {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_i64(self.0.timestamp())
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+    use chrono::{offset::TimeZone, Utc};
+    use serde_json;
+
+    #[test]
+    fn test_ser_then_deser() -> Result<(), serde_json::Error> {
+        let dt = DateTime(Utc.ymd(2019, 1, 1).and_hms(0, 0, 0));
+        let serialized = serde_json::to_string(&dt)?;
+        let deserialized = serde_json::from_str(&serialized)?;
+        assert_eq!(dt, deserialized);
+        Ok(())
     }
 }

@@ -18,12 +18,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 use crate::{App, DateTime, Oid};
 
 #[derive(
-    Deserialize, Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
+    Deserialize, Serialize, Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
 )]
 #[serde(rename_all = "snake_case")]
 pub enum CheckRunStatus {
@@ -33,7 +33,7 @@ pub enum CheckRunStatus {
 }
 
 #[derive(
-    Deserialize, Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
+    Deserialize, Serialize, Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
 )]
 #[serde(rename_all = "snake_case")]
 pub enum Conclusion {
@@ -46,7 +46,7 @@ pub enum Conclusion {
 }
 
 #[derive(
-    Deserialize, Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
+    Deserialize, Serialize, Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
 )]
 #[serde(rename_all = "snake_case")]
 pub enum AnnotationLevel {
@@ -55,7 +55,7 @@ pub enum AnnotationLevel {
     Failure,
 }
 
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct Annotation {
     /// Required. The path of the file to add an annotation to. For example,
     /// `assets/css/main.css`.
@@ -92,7 +92,7 @@ pub struct Annotation {
     pub raw_details: Option<String>,
 }
 
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct Image {
     /// Required. The alternative text for the image.
     pub alt: String,
@@ -104,7 +104,7 @@ pub struct Image {
     pub caption: Option<String>,
 }
 
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct Output {
     /// The title of the check run.
     pub title: String,
@@ -133,7 +133,7 @@ pub struct Output {
     pub images: Option<Vec<Image>>,
 }
 
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct CheckRunAction {
     /// The text to be displayed on a button in the web UI. The maximum size is
     /// 20 characters.
@@ -148,13 +148,13 @@ pub struct CheckRunAction {
     pub identifier: String,
 }
 
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct CheckSuiteId {
     pub id: u64,
 }
 
 /// A repo associated with a `CheckRun`.
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct CheckRunRepo {
     pub id: u64,
     pub url: String,
@@ -162,7 +162,7 @@ pub struct CheckRunRepo {
 }
 
 /// A commit associated with a `CheckRun`.
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct CheckRunCommit {
     #[serde(rename = "ref")]
     pub git_ref: String,
@@ -171,7 +171,7 @@ pub struct CheckRunCommit {
 }
 
 /// A pull request associated with a `CheckRun`.
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct CheckRunPullRequest {
     pub url: String,
     pub id: u64,
@@ -180,7 +180,7 @@ pub struct CheckRunPullRequest {
     pub base: CheckRunCommit,
 }
 
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct CheckRun {
     /// The ID of the check run.
     pub id: u64,
@@ -224,7 +224,7 @@ pub struct CheckRun {
     pub actions: Option<Vec<CheckRunAction>>,
 }
 
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct CheckSuite {
     pub id: u64,
 

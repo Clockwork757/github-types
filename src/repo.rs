@@ -18,12 +18,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 use crate::{DateTime, Oid, User};
 
 /// Short info about a repository.
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct ShortRepo {
     pub id: u64,
     pub name: String,
@@ -32,7 +32,7 @@ pub struct ShortRepo {
 }
 
 /// A repository.
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct Repository {
     pub id: u64,
     pub owner: User,
@@ -102,7 +102,7 @@ pub struct Repository {
     pub updated_at: DateTime,
 }
 
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct Comment {
     pub id: u64,
     pub url: String,
@@ -113,7 +113,7 @@ pub struct Comment {
     pub updated_at: DateTime,
 }
 
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct PullRequest {
     pub id: u64,
     pub url: String,
@@ -151,7 +151,7 @@ pub struct PullRequest {
     pub labels: Vec<Label>,
 }
 
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct ShortCommit {
     pub label: String,
     #[serde(rename = "ref")]
@@ -160,14 +160,14 @@ pub struct ShortCommit {
     pub user: User,
 }
 
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct Label {
     pub url: String,
     pub name: String,
     pub color: String,
 }
 
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct Issue {
     pub id: u64,
     pub url: String,
@@ -192,7 +192,7 @@ pub struct Issue {
 }
 
 /// A reference to a pull request.
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct PullRef {
     pub url: String,
     pub html_url: String,
@@ -201,14 +201,14 @@ pub struct PullRef {
 }
 
 #[derive(
-    Deserialize, Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
+    Deserialize, Serialize, Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
 )]
 #[serde(rename_all = "snake_case")]
 pub enum ReviewState {
     Commented,
 }
 
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct Review {
     pub id: u64,
     pub user: User,

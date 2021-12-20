@@ -25,7 +25,7 @@
 use derive_more::From;
 use serde::{
     de::{self, Deserializer},
-    Deserialize,
+    Deserialize, Serialize,
 };
 
 use std::fmt;
@@ -37,7 +37,7 @@ use crate::{
 };
 
 /// GitHub events that are specified in the X-Github-Event header.
-#[derive(Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash, Serialize)]
 pub enum EventType {
     /// (Special event.) Any time any event is triggered (Wildcard Event).
     Wildcard,
@@ -346,7 +346,7 @@ impl fmt::Display for EventType {
 /// For documentation on each of these events, see:
 /// https://developer.github.com/v3/activity/events/types/
 #[derive(
-    Deserialize, From, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
+    Deserialize, Serialize, From, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
 )]
 #[serde(untagged)]
 #[allow(clippy::large_enum_variant)]
@@ -456,20 +456,20 @@ impl AppEvent for Event {
 
 /// The App installation ID.
 #[derive(
-    Deserialize, Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
+    Deserialize, Serialize, Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
 )]
 pub struct InstallationId {
     pub id: u64,
 }
 
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[serde(tag = "type")]
 pub enum Hook {
     Repository(RepoHook),
     App(AppHook),
 }
 
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct RepoHook {
     pub id: u64,
     pub name: String,
@@ -483,7 +483,7 @@ pub struct RepoHook {
     pub ping_url: String,
 }
 
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct HookConfig {
     pub content_type: String,
     pub insecure_ssl: String,
@@ -491,7 +491,7 @@ pub struct HookConfig {
     pub url: String,
 }
 
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct AppHook {
     pub id: u64,
     pub name: String,
@@ -503,7 +503,7 @@ pub struct AppHook {
     pub app_id: u64,
 }
 
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct PingEvent {
     pub zen: String,
     pub hook_id: u64,
@@ -515,7 +515,7 @@ pub struct PingEvent {
 impl AppEvent for PingEvent {}
 
 #[derive(
-    Deserialize, Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
+    Deserialize, Serialize, Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
 )]
 #[serde(rename_all = "snake_case")]
 pub enum CheckRunEventAction {
@@ -534,7 +534,7 @@ pub enum CheckRunEventAction {
 }
 
 /// See: https://developer.github.com/v3/activity/events/types/#checkrunevent
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct CheckRunEvent {
     /// The action performed.
     pub action: CheckRunEventAction,
@@ -559,7 +559,7 @@ impl AppEvent for CheckRunEvent {
 }
 
 #[derive(
-    Deserialize, Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
+    Deserialize, Serialize, Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
 )]
 #[serde(rename_all = "snake_case")]
 pub enum CheckSuiteEventAction {
@@ -590,7 +590,7 @@ impl CheckSuiteEventAction {
 }
 
 /// See: https://developer.github.com/v3/activity/events/types/#checkrunevent
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct CheckSuiteEvent {
     /// The action performed.
     pub action: CheckSuiteEventAction,
@@ -622,14 +622,14 @@ impl AppEvent for CheckSuiteEvent {
 }
 
 #[derive(
-    Deserialize, Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
+    Deserialize, Serialize, Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
 )]
 #[serde(rename_all = "snake_case")]
 pub enum CommitCommentAction {
     Created,
 }
 
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct CommitCommentEvent {
     pub action: CommitCommentAction,
 
@@ -653,7 +653,7 @@ impl AppEvent for CommitCommentEvent {
 }
 
 #[derive(
-    Deserialize, Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
+    Deserialize, Serialize, Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
 )]
 #[serde(rename_all = "snake_case")]
 pub enum CreateRefType {
@@ -662,7 +662,7 @@ pub enum CreateRefType {
     Tag,
 }
 
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct CreateEvent {
     /// The Git ref type.
     pub ref_type: CreateRefType,
@@ -696,7 +696,7 @@ impl AppEvent for CreateEvent {
 }
 
 #[derive(
-    Deserialize, Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
+    Deserialize, Serialize, Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
 )]
 #[serde(rename_all = "snake_case")]
 pub enum DeleteRefType {
@@ -704,7 +704,7 @@ pub enum DeleteRefType {
     Tag,
 }
 
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct DeleteEvent {
     /// The Git ref type.
     pub ref_type: DeleteRefType,
@@ -730,7 +730,7 @@ impl AppEvent for DeleteEvent {
 }
 
 #[derive(
-    Deserialize, Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
+    Deserialize, Serialize, Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
 )]
 #[serde(rename_all = "snake_case")]
 pub enum GitHubAppAuthorizationAction {
@@ -739,7 +739,7 @@ pub enum GitHubAppAuthorizationAction {
 
 /// Triggered when someone revokes their authorization of a GitHub App. A GitHub
 /// App receives this webhook by default and cannot unsubscribe from this event.
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct GitHubAppAuthorizationEvent {
     pub action: GitHubAppAuthorizationAction,
 
@@ -757,7 +757,7 @@ impl AppEvent for GitHubAppAuthorizationEvent {
 }
 
 #[derive(
-    Deserialize, Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
+    Deserialize, Serialize, Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
 )]
 #[serde(rename_all = "snake_case")]
 pub enum PageAction {
@@ -765,7 +765,7 @@ pub enum PageAction {
     Edited,
 }
 
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct PageEvent {
     pub page_name: String,
     pub title: String,
@@ -775,7 +775,7 @@ pub struct PageEvent {
     pub html_url: String,
 }
 
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct GollumEvent {
     /// The pages that were created or edited.
     pub pages: Vec<PageEvent>,
@@ -797,7 +797,7 @@ impl AppEvent for GollumEvent {
 }
 
 #[derive(
-    Deserialize, Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
+    Deserialize, Serialize, Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
 )]
 #[serde(rename_all = "snake_case")]
 pub enum InstallationAction {
@@ -806,7 +806,7 @@ pub enum InstallationAction {
     NewPermissionsAccepted,
 }
 
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct InstallationEvent {
     pub action: InstallationAction,
     pub installation: Installation,
@@ -820,7 +820,7 @@ impl AppEvent for InstallationEvent {
 }
 
 #[derive(
-    Deserialize, Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
+    Deserialize, Serialize, Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
 )]
 #[serde(rename_all = "snake_case")]
 pub enum InstallationRepositoriesAction {
@@ -828,7 +828,7 @@ pub enum InstallationRepositoriesAction {
     Removed,
 }
 
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct InstallationRepositoriesEvent {
     pub action: InstallationRepositoriesAction,
     pub installation: Installation,
@@ -846,7 +846,7 @@ impl AppEvent for InstallationRepositoriesEvent {
 
 
 #[derive(
-    Deserialize, Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
+    Deserialize, Serialize, Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
 )]
 #[serde(rename_all = "snake_case")]
 pub enum IssueCommentAction {
@@ -855,7 +855,7 @@ pub enum IssueCommentAction {
     Deleted,
 }
 
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct IssueCommentEvent {
     /// The action that was performed.
     pub action: IssueCommentAction,
@@ -883,7 +883,7 @@ impl AppEvent for IssueCommentEvent {
 }
 
 #[derive(
-    Deserialize, Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
+    Deserialize, Serialize, Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
 )]
 #[serde(rename_all = "snake_case")]
 pub enum IssueAction {
@@ -903,12 +903,12 @@ pub enum IssueAction {
     Demilestoned,
 }
 
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct ChangeFrom {
     pub from: String,
 }
 
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct IssueChanges {
     /// A change to the body, if any.
     pub body: Option<ChangeFrom>,
@@ -917,7 +917,7 @@ pub struct IssueChanges {
     pub title: Option<ChangeFrom>,
 }
 
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct IssuesEvent {
     /// The action that was performed.
     pub action: IssueAction,
@@ -953,7 +953,7 @@ impl AppEvent for IssuesEvent {
 }
 
 #[derive(
-    Deserialize, Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
+    Deserialize, Serialize, Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
 )]
 #[serde(rename_all = "snake_case")]
 pub enum LabelAction {
@@ -962,7 +962,7 @@ pub enum LabelAction {
     Deleted,
 }
 
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct LabelChanges {
     /// A change to the body, if any.
     pub color: Option<ChangeFrom>,
@@ -971,7 +971,7 @@ pub struct LabelChanges {
     pub name: Option<ChangeFrom>,
 }
 
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct LabelEvent {
     /// The action that was performed.
     pub action: LabelAction,
@@ -999,7 +999,7 @@ impl AppEvent for LabelEvent {
 }
 
 #[derive(
-    Deserialize, Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
+    Deserialize, Serialize, Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
 )]
 #[serde(rename_all = "snake_case")]
 pub enum PullRequestAction {
@@ -1019,7 +1019,7 @@ pub enum PullRequestAction {
     Synchronize,
 }
 
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct PullRequestEvent {
     /// The action that was performed. Can be one of "assigned", "unassigned",
     /// "review_requested", "review_request_removed", "labeled", "unlabeled",
@@ -1054,7 +1054,7 @@ impl AppEvent for PullRequestEvent {
 }
 
 #[derive(
-    Deserialize, Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
+    Deserialize, Serialize, Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
 )]
 #[serde(rename_all = "snake_case")]
 pub enum PullRequestReviewAction {
@@ -1063,12 +1063,12 @@ pub enum PullRequestReviewAction {
     Dismissed,
 }
 
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct PullRequestReviewChanges {
     pub body: Option<ChangeFrom>,
 }
 
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct PullRequestReviewEvent {
     /// The action that was performed.
     pub action: PullRequestReviewAction,
@@ -1099,7 +1099,7 @@ impl AppEvent for PullRequestReviewEvent {
 }
 
 #[derive(
-    Deserialize, Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
+    Deserialize, Serialize, Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
 )]
 #[serde(rename_all = "snake_case")]
 pub enum PullRequestReviewCommentAction {
@@ -1108,13 +1108,13 @@ pub enum PullRequestReviewCommentAction {
     Deleted,
 }
 
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct PullRequestReviewCommentChanges {
     /// A change to the body, if any.
     pub body: Option<ChangeFrom>,
 }
 
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct PullRequestReviewCommentEvent {
     pub action: PullRequestReviewCommentAction,
 
@@ -1143,20 +1143,20 @@ impl AppEvent for PullRequestReviewCommentEvent {
     }
 }
 
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct Pusher {
     pub name: String,
     pub email: Option<String>,
 }
 
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct PushAuthor {
     pub name: String,
     pub email: Option<String>,
     pub username: Option<String>,
 }
 
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct PushCommit {
     pub id: Oid,
     pub tree_id: Oid,
@@ -1171,7 +1171,7 @@ pub struct PushCommit {
     pub modified: Vec<String>,
 }
 
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct PushEvent {
     /// The Git ref string that was pushed.
     #[serde(rename = "ref")]
@@ -1224,7 +1224,7 @@ impl AppEvent for PushEvent {
 }
 
 #[derive(
-    Deserialize, Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
+    Deserialize, Serialize, Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
 )]
 #[serde(rename_all = "snake_case")]
 pub enum RepositoryAction {
@@ -1236,7 +1236,7 @@ pub enum RepositoryAction {
     Privatized,
 }
 
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct RepositoryEvent {
     /// The action that was performed.
     pub action: RepositoryAction,
@@ -1258,14 +1258,14 @@ impl AppEvent for RepositoryEvent {
 }
 
 #[derive(
-    Deserialize, Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
+    Deserialize, Serialize, Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
 )]
 #[serde(rename_all = "snake_case")]
 pub enum WatchAction {
     Started,
 }
 
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct WatchEvent {
     /// The action that was performed.
     pub action: WatchAction,

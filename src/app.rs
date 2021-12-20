@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 use crate::{DateTime, EventType, User};
 
@@ -30,7 +30,7 @@ pub trait AppEvent {
 }
 
 #[derive(
-    Deserialize, Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
+    Deserialize, Serialize, Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash,
 )]
 #[serde(rename_all = "snake_case")]
 pub enum Permission {
@@ -39,7 +39,7 @@ pub enum Permission {
 }
 
 /// Permissions given to the app installation.
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct InstallationPermissions {
     pub issues: Option<Permission>,
     pub contents: Option<Permission>,
@@ -48,7 +48,7 @@ pub struct InstallationPermissions {
 }
 
 /// Information about an app installation.
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct Installation {
     pub id: u64,
     pub account: User,
@@ -67,7 +67,7 @@ pub struct Installation {
 }
 
 /// Information about an app.
-#[derive(Deserialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
 pub struct App {
     pub id: u64,
     pub owner: User,
